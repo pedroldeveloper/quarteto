@@ -1,13 +1,12 @@
 :root{
   --bg:#0b0b0d;
-  --panel:#111217;
-  --muted:#9ca3af;
   --cell:#1f2937;
   --green:#16a34a;
   --yellow:#eab308;
   --gray:#374151;
   --key-bg:#20232a;
   --accent:#ef4444;
+  --muted:#9ca3af;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -18,33 +17,31 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:14px;
+  padding:12px;
   gap:12px;
 }
 h1{font-size:20px;margin:6px 0}
-#game-container{
-  display:flex;
-  gap:14px;
+#boards-container{
   width:100%;
   max-width:1100px;
+  display:flex;
+  gap:14px;
   justify-content:center;
   align-items:flex-start;
   padding-bottom:8px;
 }
 
-/* boards */
+/* board */
 .board{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  padding:8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:10px;
   border-radius:8px;
-  min-width:240px;
-  display:grid;
-  gap:6px;
+  min-width:260px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
-.board .grid{
-  display:grid;
-  gap:6px;
-}
+.grid-rows{display:flex;flex-direction:column;gap:6px}
 .row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .tile{
   width:44px;height:44px;
@@ -63,15 +60,16 @@ h1{font-size:20px;margin:6px 0}
 .tile.present{background:var(--yellow);border-color:var(--yellow);color:#1a1200}
 .tile.absent{background:var(--gray);border-color:var(--gray);color:#cbd5e1;opacity:.95}
 
-/* keyboard (desktop) */
+/* keyboard desktop */
 #keyboard{
   width:100%;
   max-width:720px;
-  margin:8px auto 0;
+  margin:12px auto 0;
   display:flex;
   flex-wrap:wrap;
   gap:8px;
   justify-content:center;
+  align-items:center;
 }
 .key{
   position:relative;
@@ -89,22 +87,17 @@ h1{font-size:20px;margin:6px 0}
   font-size:16px;
   overflow:hidden;
 }
-.key span{
+.key .letter{
   position:relative;
-  z-index:3;
-  color:#fff;
+  z-index:10;
   text-shadow:0 1px 2px #000;
 }
+
+/* quadrants behind letters */
 .key .quads{
   position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;z-index:1;
 }
 .quad{width:100%;height:100%;opacity:0.95}
-.quad.top-left{align-self:start;justify-self:start}
-.quad.top-right{align-self:start;justify-self:end}
-.quad.bottom-left{align-self:end;justify-self:start}
-.quad.bottom-right{align-self:end;justify-self:end}
-
-/* quad states (aplicadas dinamicamente) */
 .quad.green{background:var(--green)}
 .quad.yellow{background:var(--yellow)}
 .quad.gray{background:rgba(148,163,184,0.12)}
@@ -112,7 +105,7 @@ h1{font-size:20px;margin:6px 0}
 /* popup */
 #popup{
   position:fixed;
-  bottom:70px;
+  bottom:80px;
   left:50%;
   transform:translateX(-50%);
   background:var(--accent);
@@ -126,36 +119,49 @@ h1{font-size:20px;margin:6px 0}
 }
 #popup.show{opacity:1;pointer-events:auto}
 
-/* mobile input (hidden by default) */
+/* mobile input (styled, no "listras") */
+#mobile-input-wrap{
+  display:none;
+  gap:8px;
+  align-items:center;
+  margin-top:10px;
+}
 #mobile-input{
-  position:fixed;
-  bottom:8px;
-  left:50%;
-  transform:translateX(-50%);
-  width:60%;
-  max-width:420px;
   padding:10px 12px;
-  border-radius:8px;
-  border:2px solid rgba(255,255,255,0.06);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.06);
   background:#0f1720;
   color:#fff;
   font-size:18px;
+  width:60%;
+  max-width:420px;
   outline:none;
-  display:none;
+  -webkit-appearance:none;
+}
+#mobile-submit{
+  padding:10px 12px;
+  border-radius:8px;
+  background:var(--green);
+  color:#04260f;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
 }
 
-/* responsive adjustments for mobile */
+/* responsive mobile: 2x2 boards, smaller tiles, hide desktop keyboard */
 @media (max-width:720px){
-  #game-container{
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
+  #boards-container{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    grid-auto-rows:auto;
+    gap:10px;
+    width:100%;
+    padding:6px;
   }
-  .board{min-width:90%;max-width:420px}
-  .tile{width:48px;height:48px;font-size:18px}
+  .board{min-width:unset;max-width:420px;padding:8px}
+  .tile{width:36px;height:36px;font-size:16px}
   #keyboard{display:none}
-  #mobile-input{display:none} /* shown dynamically only when needed */
+  #mobile-input-wrap{display:flex}
 }
 
-/* small tweaks */
-footer{margin-top:12px;color:var(--muted);font-size:13px}
+footer{margin-top:10px;color:var(--muted);font-size:13px}
